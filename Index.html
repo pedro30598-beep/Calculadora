@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projeto de estudo — Calculadora</title>
+  <link rel="stylesheet" href="calculadora.css">
+</head>
+<body>
+
+<div id="calculadora">
+  <div id="visor"><span id="visorInfo"></span></div>
+
+  <div id="buttonGrid">
+    <button class="button operadores" value="(">(</button>
+    <button class="button" onclick="calculadora.apagarUltimoDigito()">DEL</button>
+    <button class="button operadores" value=")">)</button>
+    <button class="button operadores" value="/">÷</button>
+
+    <button class="button numeros" value="1">1</button>
+    <button class="button numeros" value="2">2</button>
+    <button class="button numeros" value="3">3</button>
+    <button class="button operadores" value="*">×</button>
+
+    <button class="button numeros" value="4">4</button>
+    <button class="button numeros" value="5">5</button>
+    <button class="button numeros" value="6">6</button>
+    <button class="button operadores" value="-">−</button>
+
+    <button class="button numeros" value="7">7</button>
+    <button class="button numeros" value="8">8</button>
+    <button class="button numeros" value="9">9</button>
+    <button class="button operadores" value="+">+</button>
+
+    <button class="button-ligar" onclick="calculadora.ligarDesligar()">ON</button>
+    <button class="button numeros" value="0">0</button>
+    <button class="button operadores" value=".">,</button>
+
+    <button class="button-result" onclick="calculadora.handleOperacoes()">=</button>
+  </div>
+</div>
+
+<script>
+class Calculadora {
+  constructor() {
+    this.operacao = [];
+    this.visor = document.getElementById("visorInfo");
+    this.status = true;
+  }
+
+  lerValores(valorDigitado) {
+    if (!this.status) return;
+    this.operacao.push(valorDigitado);
+    this.visor.innerText = this.operacao.join("");
+  }
+
+  apagarUltimoDigito() {
+    if (!this.status) return;
+    this.operacao.pop();
+    this.visor.innerText = this.operacao.join("");
+  }
+
+  handleOperacoes() {
+    if (!this.status) return;
+    try {
+      const resultado = eval(this.operacao.join(""));
+      this.visor.innerText = resultado;
+      this.operacao = [resultado];
+    } catch {
+      this.visor.innerText = "Erro";
+      this.operacao = [];
+    }
+  }
+
+  ligarDesligar() {
+    this.status = !this.status;
+    this.operacao = [];
+    this.visor.innerText = "";
+  }
+}
+
+const calculadora = new Calculadora();
+
+const listaDeNumeros = Array.from(document.getElementsByClassName("numeros"));
+const listaDeOperadores = Array.from(document.getElementsByClassName("operadores"));
+
+listaDeNumeros.forEach((element) => {
+  element.addEventListener("click", (event) => {
+    calculadora.lerValores(event.target.value);
+  });
+});
+
+listaDeOperadores.forEach((element) => {
+  element.addEventListener("click", (event) => {
+    calculadora.lerValores(event.target.value);
+  });
+});
+</script>
+
+</body>
+</html>
